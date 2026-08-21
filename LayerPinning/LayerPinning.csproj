@@ -13,6 +13,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(YMM4DirPath)Newtonsoft.Json.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 		<Reference Include="ReactiveProperty">
 			<HintPath>$(YMM4DirPath)ReactiveProperty.dll</HintPath>
 			<Private>false</Private>
@@ -29,6 +33,10 @@
 			<HintPath>$(YMM4DirPath)YukkuriMovieMaker.Plugin.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\YMM4-GitHubUpdateNotifier\GitHubUpdateNotifier\*.cs" LinkBase="GitHubUpdateNotifier" />
 	</ItemGroup>
 
 	<ItemGroup>
