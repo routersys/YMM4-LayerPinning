@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LayerPinning\LayerPinning.csproj" AdditionalProperties="SkipPluginDeploy=true" />
+    <ProjectReference Include="..\Harmony\Lib.Harmony\Lib.Harmony.csproj" AdditionalProperties="TargetFrameworks=net10.0;AssemblyName=LayerPinning.0Harmony;GeneratePackageOnBuild=false;IsPackable=false" GlobalPropertiesToRemove="SkipPluginDeploy" />
   </ItemGroup>
 
   <ItemGroup>
