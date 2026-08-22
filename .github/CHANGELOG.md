@@ -12,9 +12,9 @@ YukkuriMovieMaker4向けのレイヤー固定プラグインの初回リリー�
 
 ### 1. レイヤーの固定
 
-`PinnedLayerState`は、固定したレイヤーの番号を`Timeline`ごとに保持します。`ConditionalWeakTable`で結び付けるため、タブの切り替えでビューが作り直されても固定は維持されます。固定できるのはレイヤー1だけで、固定していない状態を`-1`で表します。
+`PinnedLayerState`は、固定したレイヤーの番号を`Timeline`ごとに保持します。`ConditionalWeakTable`で結び付けるため、タブの切り替えでビューが作り直されても固定は維持されます。固定できるのは一番上のレイヤーだけで、固定していない状態を`-1`で表します。
 
-`LayerPinMenu`は、`ContextMenu.Opened`のクラスハンドラーでレイヤーラベルのメニューへ項目を追加します。メニューの`DataContext`が`TimelineLayerLabelItemViewModel`である場合にだけ働き、区切り線とチェック可能な項目を1度だけ挿入します。項目はレイヤー1のラベルでだけ表示し、それ以外のレイヤーでは折りたたみます。固定の状態はメニューを開くたびに反映します。
+`LayerPinMenu`は、`ContextMenu.Opened`のクラスハンドラーでレイヤーラベルのメニューへ項目を追加します。メニューの`DataContext`が`TimelineLayerLabelItemViewModel`である場合にだけ働き、区切り線とチェック可能な項目を1度だけ挿入します。項目は一番上のレイヤーのラベルでだけ表示し、それ以外のレイヤーでは折りたたみます。固定の状態はメニューを開くたびに反映します。
 
 ### 2. アドナー層による重ね合わせ
 
