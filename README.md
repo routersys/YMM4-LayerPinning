@@ -11,6 +11,8 @@ YukkuriMovieMaker4（YMM4）上で動作する、タイムラインの一番上�
 他のレイヤーは固定したレイヤーの下を流れていきます。
 固定はレイヤーラベルの右クリックメニューから切り替え、シーンごとに保持します。
 
+![Image](https://github.com/routersys/YMM4-LayerPinning/blob/main/docs/LayerPinning.png)
+
 ---
 
 ## 目次
