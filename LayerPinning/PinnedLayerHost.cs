@@ -184,24 +184,24 @@ namespace LayerPinning
 
         private void Update()
         {
-            var pinnedLayer = state?.PinnedLayer ?? PinnedLayerState.NoLayer;
+            var pinnedCount = state?.PinnedCount ?? 0;
             var layerHeight = LayerGeometry.LayerHeight;
             foreach (var group in groups)
             {
-                if (pinnedLayer == PinnedLayerState.NoLayer || layerHeight <= 0)
+                if (pinnedCount <= 0 || layerHeight <= 0)
                 {
                     group.Detach();
                     continue;
                 }
                 var viewport = ViewportOf(group.ScrollViewer);
-                var offsetY = LayerGeometry.OffsetY(viewport, pinnedLayer, layerHeight);
+                var offsetY = LayerGeometry.OffsetY(viewport);
                 group.Attach();
-                group.Adorner.SetBand(LayerGeometry.Band(viewport, pinnedLayer, layerHeight), offsetY);
-                var filter = LayerGeometry.FilterViewport(viewport, pinnedLayer, layerHeight);
+                group.Adorner.SetBand(LayerGeometry.Band(viewport, pinnedCount, layerHeight), offsetY);
+                var filter = LayerGeometry.FilterViewport(viewport, pinnedCount, layerHeight);
                 foreach (var mirror in group.Mirrors)
                     mirror.SetBand(viewport, filter, offsetY);
                 foreach (var overlay in group.Overlays)
-                    overlay.SetBand(pinnedLayer, layerHeight);
+                    overlay.SetBand(pinnedCount, layerHeight);
             }
         }
 
@@ -241,7 +241,7 @@ namespace LayerPinning
                 return null;
             var viewport = ViewportOf(groups[0].ScrollViewer);
             var position = Mouse.GetPosition(cursorSource);
-            var mapped = LayerGeometry.MapToPinnedLayer(position.Y, viewport.Y, state.PinnedLayer, LayerGeometry.LayerHeight);
+            var mapped = LayerGeometry.MapToPinnedLayers(position.Y, viewport.Y, state.PinnedCount, LayerGeometry.LayerHeight);
             return mapped is null ? null : new Point(position.X, mapped.Value);
         }
 
@@ -394,10 +394,10 @@ namespace LayerPinning
                 return overlay;
             }
 
-            public void SetBand(int layer, int layerHeight)
+            public void SetBand(int pinnedCount, int layerHeight)
             {
-                Canvas.SetTop(bar, layer * (double)layerHeight);
-                bar.Height = layerHeight;
+                Canvas.SetTop(bar, 0.0);
+                bar.Height = LayerGeometry.BandHeight(pinnedCount, layerHeight);
             }
         }
     }

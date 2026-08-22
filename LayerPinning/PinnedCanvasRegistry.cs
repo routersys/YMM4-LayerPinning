@@ -22,7 +22,7 @@ namespace LayerPinning
                 return false;
             if (!sources.TryGetValue(source, out var state) || !state.IsPinned)
                 return false;
-            return LayerGeometry.IsWithinSingleLayer(item, state.PinnedLayer);
+            return LayerGeometry.IsWithinPinnedLayers(item, state.PinnedCount);
         }
     }
 }

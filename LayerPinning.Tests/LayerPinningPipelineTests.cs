@@ -34,7 +34,7 @@ public class LayerPinningPipelineTests
             Assert.True((bool)isInViewPort!.Invoke(control, [item])!);
 
             var state = new PinnedLayerState();
-            state.Toggle();
+            state.Toggle(PinnedLayerState.TopLayer);
             PinnedCanvasRegistry.Register(control, state);
             try
             {
@@ -43,7 +43,7 @@ public class LayerPinningPipelineTests
             finally
             {
                 PinnedCanvasRegistry.Unregister(control);
-                state.Toggle();
+                state.Toggle(PinnedLayerState.TopLayer);
             }
         });
     }

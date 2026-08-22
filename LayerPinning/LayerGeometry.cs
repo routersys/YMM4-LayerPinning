@@ -11,30 +11,36 @@ namespace LayerPinning
 
         public static int LayerHeight => SettingsBase<YMMSettings>.Default.LayerHeight;
 
-        public static bool IsWithinSingleLayer(IFastCanvasItemsControlViewModel item, int layer)
-            => IsWithinSingleLayer(item.Top, item.Height, LayerHeight, layer);
+        public static bool IsWithinPinnedLayers(IFastCanvasItemsControlViewModel item, int pinnedCount)
+            => IsWithinPinnedLayers(item.Top, item.Height, LayerHeight, pinnedCount);
 
-        public static bool IsWithinSingleLayer(double top, double height, int layerHeight, int layer)
+        public static bool IsWithinPinnedLayers(double top, double height, int layerHeight, int pinnedCount)
         {
-            if (layerHeight <= 0 || height > layerHeight + BandInset)
+            if (layerHeight <= 0 || pinnedCount <= 0 || height > layerHeight + BandInset)
                 return false;
-            return (int)Math.Floor(top / layerHeight) == layer;
+            var layer = (int)Math.Floor(top / layerHeight);
+            return PinnedLayerState.TopLayer <= layer && layer < pinnedCount;
         }
 
-        public static Rect Band(Rect viewport, int layer, int layerHeight)
-            => new(viewport.X, layer * (double)layerHeight, viewport.Width, layerHeight);
+        public static double BandHeight(int pinnedCount, int layerHeight)
+            => Math.Max(0.0, pinnedCount * (double)layerHeight);
 
-        public static Rect FilterViewport(Rect viewport, int layer, int layerHeight)
-            => new(viewport.X, layer * (double)layerHeight + BandInset, viewport.Width, Math.Max(0.0, layerHeight - BandInset * 2.0));
+        public static Rect Band(Rect viewport, int pinnedCount, int layerHeight)
+            => new(viewport.X, 0.0, viewport.Width, BandHeight(pinnedCount, layerHeight));
 
-        public static double OffsetY(Rect viewport, int layer, int layerHeight)
-            => viewport.Y - layer * (double)layerHeight;
+        public static Rect FilterViewport(Rect viewport, int pinnedCount, int layerHeight)
+            => new(viewport.X, BandInset, viewport.Width, Math.Max(0.0, BandHeight(pinnedCount, layerHeight) - BandInset * 2.0));
 
-        public static double? MapToPinnedLayer(double y, double viewportY, int layer, int layerHeight)
+        public static double OffsetY(Rect viewport)
+            => viewport.Y;
+
+        public static double? MapToPinnedLayers(double y, double viewportY, int pinnedCount, int layerHeight)
         {
-            if (layerHeight <= 0 || y < viewportY || viewportY + layerHeight <= y)
+            if (layerHeight <= 0 || pinnedCount <= 0)
                 return null;
-            return layer * (double)layerHeight + y - viewportY;
+            if (y < viewportY || viewportY + BandHeight(pinnedCount, layerHeight) <= y)
+                return null;
+            return y - viewportY;
         }
     }
 }

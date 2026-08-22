@@ -17,10 +17,10 @@ namespace LayerPinning
                 return;
             var entry = entries.GetValue(menu, Create);
             var state = StateOf(menu.PlacementTarget);
-            var isAvailable = state is not null && label.Id == PinnedLayerState.PinnableLayer;
+            var isAvailable = state is not null && state.CanToggle(label.Id);
             entry.SetAvailability(isAvailable);
-            entry.Item.Tag = state;
-            entry.Item.IsChecked = isAvailable && state!.IsPinned;
+            entry.Item.Tag = isAvailable ? new PinTarget(state!, label.Id) : null;
+            entry.Item.IsChecked = isAvailable && state!.IsPinnedLayer(label.Id);
         }
 
         private static PinMenuEntry Create(ContextMenu menu)
@@ -39,9 +39,9 @@ namespace LayerPinning
 
         private static void OnClick(object sender, RoutedEventArgs e)
         {
-            if (sender is not MenuItem { Tag: PinnedLayerState state })
+            if (sender is not MenuItem { Tag: PinTarget target })
                 return;
-            state.Toggle();
+            target.State.Toggle(target.Layer);
             LayerPinningUpdateNotifier.EnsureCheckedOnce();
         }
 
@@ -67,6 +67,8 @@ namespace LayerPinning
             }
             return null;
         }
+
+        private sealed record PinTarget(PinnedLayerState State, int Layer);
 
         private sealed class PinMenuEntry(Separator separator, MenuItem item)
         {
